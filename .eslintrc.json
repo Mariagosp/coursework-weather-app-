@@ -1,0 +1,32 @@
+{
+  "extends": ["plugin:react-native/all", "prettier"],
+  "plugins": ["react", "react-native", "@typescript-eslint", "prettier", "import", "unused-imports"],
+  "rules": {
+      "camelcase": "error",
+      "no-console": "warn",
+      "no-floating-decimal": "error",
+      "no-sequences": "error",
+      "curly": "off",
+      "no-lonely-if": "error",
+      "one-var-declaration-per-line": "error",
+      "react-native/no-inline-styles": "warn",
+      "react-native/no-unused-styles": "error",
+      "@typescript-eslint/consistent-type-exports": "error",
+      "@typescript-eslint/consistent-type-imports": "error",
+      "func-style": "error",
+      "no-debugger": "warn",
+      "no-empty": "error",
+      "semi": ["warn", "never"],
+      "quotes": ["error", "single", { "allowTemplateLiterals": false, "avoidEscape": true }],
+      "prettier/prettier": ["warn", { "endOfLine": "auto", "printWidth": 100 }],
+      "import/order": [
+          "error",
+          {
+              "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+              "newlines-between": "always",
+              "alphabetize": { "order": "asc", "caseInsensitive": true }
+          }
+      ],
+      "unused-imports/no-unused-imports": "warn"
+  }
+}
