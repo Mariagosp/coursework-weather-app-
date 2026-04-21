@@ -3,15 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Pressable, Keyboar
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { LoginFormData, loginSchema } from './utils/loginSchema'
 import { COLORS } from '../../../shared/const/colors'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../../firebase'
-import { useUserStore } from '../../../shared/store'
 import { useState } from 'react'
 import { FirebaseError } from 'firebase/app'
-import ErrorMessage from '../../../components/ErrorMessage'
 import { mapFirebaseError } from '../../../utils/mapFireBaseError'
+import { useUserStore } from '../../../shared/store'
+import { LoginFormData, loginSchema } from './utils'
+import ErrorMessage from '../../../components/ErrorMessage'
 
 export default function LoginPage() {
   const [error, setError] = useState('')
