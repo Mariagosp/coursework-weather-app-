@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS } from "../../shared/const/colors.js";
 import { Ionicons } from "@expo/vector-icons";
+import { useNetworkStatus } from "../../shared/hooks/index.js";
 
 type Props = {
   title?: string;
@@ -13,6 +14,7 @@ export default function Header({
   subtitle = "Your weather by location",
 }: Props) {
   const insets = useSafeAreaInsets();
+  const isConnected = useNetworkStatus();
 
   return (
     <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
@@ -27,6 +29,14 @@ export default function Header({
             })}
           </Text>
         </View>
+      </View>
+      <View style={styles.subTitleBlock}>
+        <Text style={styles.headerSubtitle}>{subtitle}</Text>
+        <Ionicons
+          name={isConnected ? "wifi" : "cloud-offline"}
+          color={COLORS.textSecondary}
+          size={15}
+        />
       </View>
     </View>
   );
