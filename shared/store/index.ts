@@ -1,1 +1,2 @@
-export { useUserStore } from './useUserStore'
+export { useUserStore } from "./useUserStore";
+export { useFavoritesStore } from "./useFavoritesStore";
