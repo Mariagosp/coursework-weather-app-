@@ -117,6 +117,11 @@ export default function HomePage() {
     });
   };
 
+  console.log({
+    weather,
+    status,
+  });
+
   if (status === "loading" && !weather) {
     return (
       <View style={[styles.container]}>

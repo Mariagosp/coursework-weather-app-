@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { COLORS } from "../../shared/const/colors.js";
+import { COLORS } from "../../shared/const/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { useNetworkStatus } from "../../shared/hooks/index.js";
+import { useNetworkStatus } from "../../shared/hooks/index";
 
 type Props = {
   title?: string;
