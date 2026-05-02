@@ -1,25 +1,25 @@
-import { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  ActivityIndicator,
-  RefreshControl,
-  ScrollView,
-} from "react-native";
+import * as Linking from "expo-linking";
 import * as Location from "expo-location";
 import { router } from "expo-router";
-import { COLORS } from "../../../shared/const/colors";
-import type { WeatherApiResponse } from "../../../types/weather";
-import * as Linking from "expo-linking";
-import { useNetworkStatus } from "../../../shared/hooks";
-import WeatherCard from "../../../components/WeatherCard";
-import { fetchWeatherByCoords } from "../../../services/weatherService";
+import { useCallback, useEffect, useState } from "react";
 import {
-  getCachedHomeWeather,
-  setCachedHomeWeather,
+    ActivityIndicator,
+    Pressable,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
+import WeatherCard from "../../../components/WeatherCard";
+import {
+    getCachedHomeWeather,
+    setCachedHomeWeather,
 } from "../../../services/homeWeatherCache";
+import { fetchWeatherByCoords } from "../../../services/weatherService";
+import { COLORS } from "../../../shared/const/colors";
+import { useNetworkStatus } from "../../../shared/hooks";
+import type { WeatherApiResponse } from "../../../types/weather";
 
 export default function HomePage() {
   const isConnected = useNetworkStatus();

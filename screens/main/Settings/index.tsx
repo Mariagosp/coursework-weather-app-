@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
-import { useUserStore } from '../../../shared/store'
+import { useState } from 'react'
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { COLORS } from '../../../shared/const/colors'
+import { useUserStore } from '../../../shared/store'
 
 export default function SettingsPage() {
     const insets = useSafeAreaInsets()
