@@ -2,10 +2,6 @@ import type { WeatherApiResponse } from '../types/weather'
 import { setCachedFavoriteWeather } from './favoritesCache'
 import { fetchWeatherById } from './weatherService'
 
-/**
- * Task 6 — incremental processing: merge any AsyncIterable into fixed-size batches.
- * Містить лише поточний буфер розміру batchSize, а не усю колекцію джерела.
- */
 export async function* batchAsyncIterable<T>(
   source: AsyncIterable<T>,
   batchSize: number
@@ -29,10 +25,6 @@ export async function* batchAsyncIterable<T>(
   }
 }
 
-/**
- * Віртуальне «велике» джерело: віддає total значень по одному без масиву довжини total (O(1) памʼять від розміру набору).
- * У реальному застосунку замість цього був би курсор БД або ReadableStream з файлу.
- */
 export async function* asyncNumericIdSequence(
   total: number,
   seedId = 2643743
@@ -45,9 +37,6 @@ export async function* asyncNumericIdSequence(
   }
 }
 
-/**
- * Приклад споживача потоку: зводить статистику лише в акумуляторах, без збереження всіх записів у памʼяті.
- */
 export async function aggregateTempRangeFromWeatherBatches(
   batches: AsyncIterable<WeatherApiResponse[]>
 ): Promise<{ count: number; minTemp: number; maxTemp: number }> {
@@ -70,7 +59,6 @@ export async function aggregateTempRangeFromWeatherBatches(
   }
 }
 
-/** Інкрементальне завантаження погоди: кожен yield — один шматок результатів (батч за батчем). */
 export async function* fetchWeatherByIdBatchesFromIds(
   ids: AsyncIterable<number>,
   batchSize: number
@@ -82,7 +70,6 @@ export async function* fetchWeatherByIdBatchesFromIds(
       try {
         out.push(await fetchWeatherById(id))
       } catch {
-        /* мережева помилка / невалідний id */
       }
     }
 
@@ -92,9 +79,6 @@ export async function* fetchWeatherByIdBatchesFromIds(
   }
 }
 
-/**
- * Реальний сценарій: оновити кеш обраних міст батчами — обробили чанк, записали в AsyncStorage, посилання відпустили.
- */
 export async function refreshFavoriteWeatherInStreamedBatches(
   favoriteCityIds: readonly number[],
   batchSize = 4
@@ -119,7 +103,6 @@ export async function refreshFavoriteWeatherInStreamedBatches(
   return { batchesProcessed, rowsWritten }
 }
 
-/** Демо без мережі: лише ланцюг async iterator → batch → обробка чанка (наприклад для звіту в звіті). */
 export async function demoVirtualDatasetPipeline(
   virtualTotal: number,
   batchSize: number
