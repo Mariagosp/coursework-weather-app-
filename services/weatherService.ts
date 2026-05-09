@@ -1,4 +1,5 @@
 import type { WeatherApiResponse } from '../types/weather'
+import { memoizeAsync } from './memoize'
 
 const API_KEY = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
@@ -51,15 +52,11 @@ export async function fetchWeatherById(cityId: number): Promise<WeatherApiRespon
     return fetchWeather({ id: cityId })
 }
 
-export async function fetchSuggestions(input: string): Promise<string[]> {
-    if (!input.trim()) {
-        return []
-    }
-
+async function fetchSuggestionsUncached(normalizedQuery: string): Promise<string[]> {
     try {
         const apiKey = getApiKey()
         const res = await fetch(
-            `http://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(input)}&limit=5&appid=${apiKey}`
+            `http://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(normalizedQuery)}&limit=5&appid=${apiKey}`
         )
         const data = await res.json()
 
@@ -69,4 +66,21 @@ export async function fetchSuggestions(input: string): Promise<string[]> {
     } catch {
         return []
     }
+}
+
+const memoizedFetchSuggestions = memoizeAsync(fetchSuggestionsUncached, {
+    maxSize: 40,
+    eviction: 'lru',
+    ttlMs: 5 * 60 * 1000,
+    serializeArgs: ([q]) => JSON.stringify([(q as string).toLowerCase()])
+})
+
+export async function fetchSuggestions(input: string): Promise<string[]> {
+    const q = input.trim()
+
+    if (!q) {
+        return []
+    }
+
+    return memoizedFetchSuggestions(q)
 }
