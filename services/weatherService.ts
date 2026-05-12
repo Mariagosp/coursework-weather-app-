@@ -1,5 +1,6 @@
 import apiClient from "../api/apiClient";
 import type { WeatherApiResponse } from "../types/weather";
+import { log } from "./logger";
 import { memoizeAsync } from "./memoize";
 import { weatherEvents } from "./weatherEvents";
 
@@ -49,18 +50,27 @@ async function fetchWeather(
   }
 }
 
-export async function fetchWeatherByCity(
-  query: string
-): Promise<WeatherApiResponse> {
+const fetchWeatherByCityBase = async (query: string) => {
   return fetchWeather({ q: query.trim() });
-}
+};
 
-export async function fetchWeatherByCoords(
+export const fetchWeatherByCity = log({
+  level: "INFO",
+  json: true,
+})(fetchWeatherByCityBase);
+
+export async function fetchWeatherByCoordsBase(
   lat: number,
   lon: number
 ): Promise<WeatherApiResponse> {
   return fetchWeather({ lat, lon });
 }
+
+export const fetchWeatherByCoords = log({
+  level: "ERROR",
+})(async (lat: number, lon: number) => {
+  return fetchWeatherByCoordsBase(lat, lon);
+});
 
 export async function fetchWeatherById(
   cityId: number
@@ -105,7 +115,7 @@ const memoizedFetchSuggestions = memoizeAsync(fetchSuggestionsUncached, {
   serializeArgs: ([q]) => JSON.stringify([(q as string).toLowerCase()]),
 });
 
-export async function fetchSuggestions(input: string): Promise<string[]> {
+export async function fetchSuggestionsBase(input: string): Promise<string[]> {
   const q = input.trim();
 
   if (!q) {
@@ -114,3 +124,7 @@ export async function fetchSuggestions(input: string): Promise<string[]> {
 
   return memoizedFetchSuggestions(q);
 }
+
+export const fetchSuggestions = log({
+  level: "DEBUG",
+})(fetchSuggestionsBase);
