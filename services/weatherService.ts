@@ -1,6 +1,7 @@
 import apiClient from "../api/apiClient";
 import type { WeatherApiResponse } from "../types/weather";
 import { memoizeAsync } from "./memoize";
+import { weatherEvents } from "./weatherEvents";
 
 const API_KEY = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY;
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
@@ -38,8 +39,12 @@ async function fetchWeather(
       authStrategy: "none",
     });
 
+    weatherEvents.emit("weatherLoaded", response.data);
+
     return response.data as WeatherApiResponse;
   } catch (error: any) {
+    weatherEvents.emit("weatherError", error);
+
     throw new Error(formatErrorMessage(error.response?.data || {}));
   }
 }
