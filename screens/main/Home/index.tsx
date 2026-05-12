@@ -3,18 +3,18 @@ import * as Location from "expo-location";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Pressable,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import WeatherCard from "../../../components/WeatherCard";
 import {
-    getCachedHomeWeather,
-    setCachedHomeWeather,
+  getCachedHomeWeather,
+  setCachedHomeWeather,
 } from "../../../services/homeWeatherCache";
 import { fetchWeatherByCoords } from "../../../services/weatherService";
 import { COLORS } from "../../../shared/const/colors";
@@ -102,10 +102,6 @@ export default function HomePage() {
     await Linking.openSettings();
   };
 
-  useEffect(() => {
-    requestLocationAndFetch();
-  }, []);
-
   const openDetails = () => {
     if (!weather) return;
 
@@ -116,6 +112,10 @@ export default function HomePage() {
       },
     });
   };
+
+  useEffect(() => {
+    requestLocationAndFetch();
+  }, []);
 
   if (status === "loading" && !weather) {
     return (

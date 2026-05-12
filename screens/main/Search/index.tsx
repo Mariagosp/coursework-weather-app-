@@ -30,6 +30,7 @@ import {
   setCachedFavoritesWeatherList,
 } from "../../../services/favoritesCache";
 import SuggestionsList from "../../../components/SuggestionsList";
+import { weatherEvents } from "../../../services/weatherEvents";
 
 export default function SearchPage() {
   const insets = useSafeAreaInsets();
@@ -124,6 +125,30 @@ export default function SearchPage() {
   const openDetailsForFavorite = (w: WeatherApiResponse) => {
     router.push({ pathname: "/weather-details", params: { id: w.id } });
   };
+
+  useEffect(() => {
+    const analyticsListener = (weather: WeatherApiResponse) => {
+      console.log("Analytics event:", weather.name);
+    };
+
+    weatherEvents.on("weatherLoaded", analyticsListener);
+
+    return () => {
+      weatherEvents.off("weatherLoaded", analyticsListener);
+    };
+  }, []);
+
+  useEffect(() => {
+    const historyListener = (weather: WeatherApiResponse) => {
+      console.log("Save to history:", weather.name);
+    };
+
+    weatherEvents.on("weatherLoaded", historyListener);
+
+    return () => {
+      weatherEvents.off("weatherLoaded", historyListener);
+    };
+  }, []);
 
   return (
     <KeyboardAvoidingView
