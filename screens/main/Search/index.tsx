@@ -31,6 +31,7 @@ import {
 } from "../../../services/favoritesCache";
 import SuggestionsList from "../../../components/SuggestionsList";
 import { weatherEvents } from "../../../services/weatherEvents";
+import { weatherQueue } from "../../../services/weatherQueue";
 
 export default function SearchPage() {
   const insets = useSafeAreaInsets();
@@ -140,7 +141,17 @@ export default function SearchPage() {
 
   useEffect(() => {
     const historyListener = (weather: WeatherApiResponse) => {
-      console.log("Save to history:", weather.name);
+      const isFavorite = favoriteCityIds.includes(weather.id);
+
+      weatherQueue.enqueue(weather.name, isFavorite ? 10 : 1);
+
+      console.log("Added to queue:", weather.name);
+
+      console.log("Highest priority:", weatherQueue.peek("highest"));
+
+      console.log("Newest:", weatherQueue.peek("newest"));
+
+      console.log("Oldest:", weatherQueue.peek("oldest"));
     };
 
     weatherEvents.on("weatherLoaded", historyListener);
